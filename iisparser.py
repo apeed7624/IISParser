@@ -27,7 +27,7 @@ def read_iis_logs(directory_path, default=False, ip_list_path=None, parsers=None
 def process_iis_log(file_path, known_ips=None, default=False, parsers=None, output_file=None):
     # 資料處理邏輯
 
-    with open(file_path, 'r') as file:
+    with open(file_path, 'rb') as file:
         # 在這裡加入檔案內容的處理邏輯
         content = file.readlines()
 
@@ -44,7 +44,10 @@ def process_iis_log(file_path, known_ips=None, default=False, parsers=None, outp
         command_records = []
 
         # 逐行檢查是否為 POST 請求且狀態碼為 200，或包含特定字串，或匹配到已知 IP
-        for line in content:
+        for line_bytes in content:
+            # 解碼字節序列，這裡使用 'utf-8' 編碼，您可以根據實際情況更改
+            line = line_bytes.decode('utf-8', errors='replace')
+
             # 使用正則表達式找出 log 中的 IP 地址
             ip_match = re.search(r'\b(?:\d{1,3}\.){3}\d{1,3}\b', line)
             if ip_match:
