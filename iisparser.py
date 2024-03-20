@@ -45,7 +45,7 @@ def process_iis_log(file_path, known_ips=None, default=False, parsers=None, outp
 
         # 逐行檢查是否為 POST 請求且狀態碼為 200，或包含特定字串，或匹配到已知 IP
         for line_bytes in content:
-            # 解碼字節序列，這裡使用 'utf-8' 編碼，您可以根據實際情況更改
+            # 解碼字節序列，這裡使用 'utf-8' 編碼，根據實際情況更改
             line = line_bytes.decode('utf-8', errors='replace')
 
             # 使用正則表達式找出 log 中的 IP 地址
@@ -84,7 +84,7 @@ def process_iis_log(file_path, known_ips=None, default=False, parsers=None, outp
 
         # 如果有匹配到的特定字串（保留原有功能），將整行寫入 command.txt
         if command_records and not parsers and not output_file and (default or not parsers):
-            with open('command.txt', 'a') as command_file:
+            with open('command.txt', 'a', encoding='utf-8') as command_file:
                 command_file.write(f"Command matches in {file_path}:\n")
                 command_file.writelines(command_records)
                 command_file.write('\n\n')
@@ -92,7 +92,7 @@ def process_iis_log(file_path, known_ips=None, default=False, parsers=None, outp
         # 如果有匹配到的特定字串，將整行寫入指定文件
         for parser, lines in matching_parser_lines.items():
             if lines and output_file and not default:
-                with open(output_file, 'a') as parser_output_file:
+                with open(output_file, 'a', encoding='utf-8') as parser_output_file:
                     parser_output_file.write(f"{parser} matches in {file_path}:\n")
                     parser_output_file.writelines(lines)
                     parser_output_file.write('\n\n')
